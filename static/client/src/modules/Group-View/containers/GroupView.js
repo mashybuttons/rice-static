@@ -25,7 +25,6 @@ class GroupView extends Component {
   }
 
   componentDidMount() {
-    // add form-control class to SearchInput input field
     const search = document.getElementsByClassName('form-group')[0].getElementsByTagName('input')[0];
     search.className += ' form-control';
 

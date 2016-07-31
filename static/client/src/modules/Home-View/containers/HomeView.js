@@ -4,9 +4,7 @@ import { actions } from './../ducks/home-view-ducks.js';
 import { bindActionCreators } from 'redux';
 import { browserHistory, Link } from 'react-router';
 import Dropdown from 'react-dropdown';
-
 import getSecureApiClient from '../../../utils/aws';
-// import axios2 from './../../../utils/api';
 import rec from '../../../utils/rec';
 
 import './HomeView.scss';
@@ -14,9 +12,6 @@ import './HomeView.scss';
 const locationsArr = [
   'Las Vegas', 'San Francisco', 'Pokeball',
 ];
-
-// const businessURL = 'http://localhost:3002/api';
-// const userURL = 'http://localhost:3001/api';
 
 
 class HomeView extends Component {
@@ -100,23 +95,23 @@ class HomeView extends Component {
       const apigClient = getSecureApiClient();
       const bodyYelp = { response: recDataArr };
 
-      apigClient.apiBusinessYelpPost({}, bodyYelp)
-      .then(responseYelp => {
-        const restNames = [];
-        responseYelp.data.forEach(name => {
-          restNames.push(JSON.parse(JSON.stringify(name)));
-        });
-
-        this.props.actions.addRecs(restNames);
-        console.log('[HomeView] apiBusinessYelpPost response', JSON.stringify(responseYelp, null, 2));
-        browserHistory.push('/restaurant');
-      })
-      .catch(errorYelp => {
-        console.log('[HomeView] apiBusinessYelpPost error', errorYelp);
-      });
+      return apigClient.apiBusinessYelpPost({}, bodyYelp);
     })
     .catch(err => {
       console.log('[HomeView] Rec Error', err);
+    })
+    .then(responseYelp => {
+      const restNames = [];
+      responseYelp.data.forEach(name => {
+        restNames.push(JSON.parse(JSON.stringify(name)));
+      });
+
+      this.props.actions.addRecs(restNames);
+      console.log('[HomeView] apiBusinessYelpPost response', JSON.stringify(responseYelp, null, 2));
+      browserHistory.push('/restaurant');
+    })
+    .catch(errorYelp => {
+      console.log('[HomeView] apiBusinessYelpPost error', errorYelp);
     });
   }
 
